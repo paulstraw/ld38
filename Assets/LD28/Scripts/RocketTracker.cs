@@ -10,9 +10,11 @@ public class RocketTracker : MonoBehaviour {
 	[SerializeField]
 	private Rigidbody rocketBody;
 	[SerializeField]
-	private float trackingSpeed = 0.09f;
+	private float minDistance = 6;
 	[SerializeField]
-	private float zoomBase = -6.0f;
+	private float maxDistance = 60;
+	[SerializeField]
+	private float zoomModifier = 2;
 
 	private List<Transform> planets;
 
@@ -26,19 +28,20 @@ public class RocketTracker : MonoBehaviour {
 		float targetY = rocketTransform.position.y;
 
 		Transform closestPlanet = GetClosestPlanet();
-		float targetZ = zoomBase * Vector3.Distance(transform.position, closestPlanet.position);
+		float targetZ = zoomModifier * Vector3.Distance(rocketTransform.position, closestPlanet.position);
+
+		targetZ = Mathf.Max(minDistance, targetZ);
+		targetZ = Mathf.Min(maxDistance, targetZ);
 
 		Vector3 targetPosition = new Vector3(targetX, targetY, targetZ);
 
-		float step = trackingSpeed * Time.deltaTime;
-
-		transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+		transform.position = targetPosition;
 	}
 
 	private Transform GetClosestPlanet(){
 		Transform bestTarget = null;
 		float closestDistanceSqr = Mathf.Infinity;
-		Vector3 currentPosition = transform.position;
+		Vector3 currentPosition = rocketTransform.position;
 		foreach(Transform potentialTarget in planets)
 		{
 			Vector3 directionToTarget = potentialTarget.position - currentPosition;
