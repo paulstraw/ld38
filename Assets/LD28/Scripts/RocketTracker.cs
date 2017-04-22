@@ -26,9 +26,15 @@ public class RocketTracker : MonoBehaviour {
 	void Update(){
 		float targetX = rocketTransform.position.x;
 		float targetY = rocketTransform.position.y;
+		float targetZ;
 
 		Transform closestPlanet = GetClosestPlanet();
-		float targetZ = zoomModifier * Vector3.Distance(rocketTransform.position, closestPlanet.position);
+
+		if (closestPlanet) {
+			targetZ = zoomModifier * Vector3.Distance(rocketTransform.position, closestPlanet.position);
+		} else {
+			targetZ = minDistance;
+		}
 
 		targetZ = Mathf.Max(minDistance, targetZ);
 		targetZ = Mathf.Min(maxDistance, targetZ);

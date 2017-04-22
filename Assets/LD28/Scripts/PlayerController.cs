@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 	[SerializeField]
-	private float rocketForce = 20;
+	private float rocketForce;
 	[SerializeField]
-	private float rotateSpeed = 0.9f;
+	private float rotateSpeed;
 	[SerializeField]
 	private GameObject world;
 	[SerializeField]
 	private Rigidbody rb;
 	[SerializeField]
 	private Transform rocketTransform;
+	[SerializeField]
+	private ParticleSystem rocketEngine;
 
 	void Update(){
 		float z = Input.GetAxis("Horizontal");
@@ -23,8 +25,14 @@ public class PlayerController : MonoBehaviour {
 //		rocketTransform.Rotate(x * rotateSpeed, -y * rotateSpeed, -z * rotateSpeed);
 		rocketTransform.Rotate(0, 0, z * rotateSpeed);
 
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		if (Input.GetKey(KeyCode.Space)) {
 			rb.AddForce(rocketTransform.TransformDirection(Vector3.up) * rocketForce);
+
+			if (!rocketEngine.isPlaying) {
+				rocketEngine.Play();
+			}
+		} else if (!rocketEngine.isStopped) {
+			rocketEngine.Stop();
 		}
 
 //
