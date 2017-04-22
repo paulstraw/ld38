@@ -25,14 +25,14 @@ public class PlayerController : MonoBehaviour {
 //		rocketTransform.Rotate(x * rotateSpeed, -y * rotateSpeed, -z * rotateSpeed);
 		rocketTransform.Rotate(0, 0, z * rotateSpeed);
 
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			rocketEngine.Play();
+		} else if (Input.GetKeyUp(KeyCode.Space)) {
+			rocketEngine.Stop();
+		}
+
 		if (Input.GetKey(KeyCode.Space)) {
 			rb.AddForce(rocketTransform.TransformDirection(Vector3.up) * rocketForce);
-
-			if (!rocketEngine.isPlaying) {
-				rocketEngine.Play();
-			}
-		} else if (!rocketEngine.isStopped) {
-			rocketEngine.Stop();
 		}
 
 //
