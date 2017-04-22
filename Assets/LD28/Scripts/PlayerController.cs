@@ -6,17 +6,13 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField]
 	private float rocketForce = 20;
 	[SerializeField]
-	private float speed = 3;
-	[SerializeField]
-	private float rotateSpeed = 3;
+	private float rotateSpeed = 0.9f;
 	[SerializeField]
 	private GameObject world;
-
+	[SerializeField]
 	private Rigidbody rb;
-
-	void Awake(){
-		rb = gameObject.GetComponent<Rigidbody>();
-	}
+	[SerializeField]
+	private Transform rocketTransform;
 
 	void Update(){
 		float z = Input.GetAxis("Horizontal");
@@ -24,10 +20,11 @@ public class PlayerController : MonoBehaviour {
 		float y = Input.GetAxis("Zed");
 
 
-		transform.Rotate(x * rotateSpeed, -y * rotateSpeed, -z * rotateSpeed);
+//		rocketTransform.Rotate(x * rotateSpeed, -y * rotateSpeed, -z * rotateSpeed);
+		rocketTransform.Rotate(0, -0, -z * rotateSpeed);
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			rb.AddForce(transform.TransformDirection(Vector3.up) * rocketForce);
+			rb.AddForce(rocketTransform.TransformDirection(Vector3.up) * rocketForce);
 		}
 
 //
