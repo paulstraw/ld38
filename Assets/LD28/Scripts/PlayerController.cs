@@ -19,10 +19,12 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update(){
-		float h = Input.GetAxis("Horizontal");
-		float v = Input.GetAxis("Vertical");
+		float z = Input.GetAxis("Horizontal");
+		float x = Input.GetAxis("Vertical");
+		float y = Input.GetAxis("Zed");
 
-		transform.Rotate(0, h * rotateSpeed, 0);
+
+		transform.Rotate(x * rotateSpeed, -y * rotateSpeed, -z * rotateSpeed);
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			rb.AddForce(transform.TransformDirection(Vector3.up) * rocketForce);
