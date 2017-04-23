@@ -91,7 +91,6 @@ public class Rocket : MonoBehaviour {
 	private void Kill() {
 		exploder.Explode();
 		rb.detectCollisions = false;
-		rb.isKinematic = true;
 	}
 
 	void Respawn() {
