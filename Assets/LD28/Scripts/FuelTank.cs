@@ -7,8 +7,10 @@ public class FuelTank : MonoBehaviour {
 	private Vector3 spin;
 	[SerializeField]
 	private float spinSpeed;
+	[SerializeField]
+	private Transform tank;
 
 	void Update() {
-		transform.Rotate(spin, spinSpeed * Time.deltaTime);
+		tank.Rotate(spin, spinSpeed * Time.deltaTime);
 	}
 }

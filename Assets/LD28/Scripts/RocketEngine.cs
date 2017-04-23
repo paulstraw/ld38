@@ -40,7 +40,7 @@ public class RocketEngine : MonoBehaviour {
 			if (CurrentFuel == 0) {
 				engineParticleSystem.Stop();
 
-				Invoke("MaybeKillRocket", 3.0f);
+				Invoke("MaybeKillRocket", 1.5f);
 			}
 
 			rb.AddForce(transform.TransformDirection(Vector3.up) * rocketForce);
