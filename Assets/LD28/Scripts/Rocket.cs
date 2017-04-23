@@ -41,7 +41,7 @@ public class Rocket : MonoBehaviour {
 
 		if (
 			distanceToClosestPlanet.HasValue && closestPlanetBody &&
-			distanceToClosestPlanet.Value <= closestPlanetBody.atmosphereThickness
+			distanceToClosestPlanet.Value <= closestPlanetBody.atmosphereRadius
 		) {
 			rb.drag = closestPlanetBody.atmosphereDrag;
 		} else {
