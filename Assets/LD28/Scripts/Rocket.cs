@@ -16,6 +16,8 @@ public class Rocket : MonoBehaviour {
 	string[] deathMessages;
 	[SerializeField]
 	string baseTutorialText;
+	[SerializeField]
+	AudioSource explosionSound;
 
 	private RocketExploder exploder;
 	private RocketEngine engine;
@@ -121,6 +123,8 @@ public class Rocket : MonoBehaviour {
 
 		engine.Kill();
 		exploder.Explode();
+		explosionSound.Play();
+
 		rb.detectCollisions = false;
 
 		CancelInvoke("ResetTutorialText");

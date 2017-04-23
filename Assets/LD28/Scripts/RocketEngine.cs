@@ -11,6 +11,8 @@ public class RocketEngine : MonoBehaviour {
 	private int startFuel;
 	[SerializeField]
 	private ParticleSystem engineParticleSystem;
+	[SerializeField]
+	private AudioSource engineAudio;
 
 	public int CurrentFuel { get; private set; }
 
@@ -29,22 +31,32 @@ public class RocketEngine : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(KeyCode.Space) && CurrentFuel > 0) {
-			engineParticleSystem.Play();
+			StartEngine();
 		} else if (Input.GetKeyUp(KeyCode.Space)) {
-			engineParticleSystem.Stop();
+			StopEngine();
 		}
 
 		if (Input.GetKey(KeyCode.Space) && CurrentFuel > 0) {
 			CurrentFuel--;
 
 			if (CurrentFuel == 0) {
-				engineParticleSystem.Stop();
+				StopEngine();
 
 				Invoke("MaybeKillRocket", 1.5f);
 			}
 
 			rb.AddForce(transform.TransformDirection(Vector3.up) * rocketForce);
 		}
+	}
+
+	private void StartEngine() {
+		engineAudio.Play();
+		engineParticleSystem.Play();
+	}
+
+	private void StopEngine() {
+		engineAudio.Stop();
+		engineParticleSystem.Stop();
 	}
 
 	public void RefuelFrom(FuelTank tank) {
@@ -58,7 +70,7 @@ public class RocketEngine : MonoBehaviour {
 	}
 
 	public void Kill() {
-		engineParticleSystem.Stop();
+		StopEngine();
 	}
 
 	public void Respawn() {
