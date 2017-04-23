@@ -17,12 +17,16 @@ public class FuelTank : MonoBehaviour {
 	public int Capacity;
 
 	private bool isScalingOut = false;
+	private Vector3 originalScale;
 
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "rocket") {
-			gameObject.GetComponent<SphereCollider>().enabled = false;
-			StartScalingOut();
+			Collect();
 		}
+	}
+
+	void Awake() {
+		originalScale = transform.localScale;
 	}
 
 	void Update() {
@@ -38,8 +42,14 @@ public class FuelTank : MonoBehaviour {
 		}
 	}
 
-	private void StartScalingOut() {
+	private void Collect() {
 		isScalingOut = true;
-		Destroy(gameObject, scaleSpeed * 0.1f);
+		gameObject.GetComponent<SphereCollider>().enabled = false;
+	}
+
+	public void Respawn() {
+		gameObject.GetComponent<SphereCollider>().enabled = true;
+		isScalingOut = false;
+		transform.localScale = originalScale;
 	}
 }

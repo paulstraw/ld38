@@ -149,6 +149,10 @@ public class Rocket : MonoBehaviour {
 		engine.Respawn();
 		thruster.Respawn();
 
+		foreach (var tank in FindObjectsOfType<FuelTank>()) {
+			tank.Respawn();
+		}
+
 		Dead = false;
 
 		Invoke("ResetTutorialText", 2.1f);
