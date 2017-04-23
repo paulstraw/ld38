@@ -5,6 +5,14 @@ using UnityEngine;
 public class Explodify : MonoBehaviour {
 	[SerializeField]
 	private float scaleSpeed = 6.0f;
+	[SerializeField]
+	private float lifetimeMin = 3f;
+	[SerializeField]
+	private float lifetimeMax = 9f;
+	[SerializeField]
+	private float torqueRange = 12f;
+	[SerializeField]
+	private float forceRange = 12f;
 
 	private bool isScalingOut = false;
 
@@ -22,18 +30,18 @@ public class Explodify : MonoBehaviour {
 
 	void Awake() {
 		Rigidbody rb = gameObject.GetComponent<Rigidbody>();
-		float lifetime = Random.Range(0.9f, 1.8f);
+		float lifetime = Random.Range(lifetimeMin, lifetimeMax);
 
 		rb.AddTorque(new Vector3(
-			Random.Range(-12f, 12f),
-			Random.Range(-12f, 12f),
-			Random.Range(-12f, 12f)
+			Random.Range(-torqueRange, torqueRange),
+			Random.Range(-torqueRange, torqueRange),
+			Random.Range(-torqueRange, torqueRange)
 		));
 
 		rb.AddForce(new Vector3(
-			Random.Range(-12f, 12f),
-			Random.Range(-12f, 12f),
-			Random.Range(-12f, 12f)
+			Random.Range(-forceRange, forceRange),
+			Random.Range(-forceRange, forceRange),
+			Random.Range(-forceRange, forceRange)
 		));
 
 		Invoke("StartScalingOut", lifetime);
