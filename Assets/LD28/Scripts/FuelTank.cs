@@ -9,8 +9,37 @@ public class FuelTank : MonoBehaviour {
 	private float spinSpeed;
 	[SerializeField]
 	private Transform tank;
+	[SerializeField]
+	private Transform tankWrapper;
+	[SerializeField]
+	private float scaleSpeed;
+
+	public int Capacity;
+
+	private bool isScalingOut = false;
+
+	void OnTriggerEnter(Collider other) {
+		if (other.gameObject.tag == "rocket") {
+			gameObject.GetComponent<SphereCollider>().enabled = false;
+			StartScalingOut();
+		}
+	}
 
 	void Update() {
 		tank.Rotate(spin, spinSpeed * Time.deltaTime);
+		tankWrapper.Rotate(-spin, spinSpeed * Time.deltaTime);
+
+		if (isScalingOut) {
+			transform.localScale = new Vector3(
+				Mathf.Lerp(transform.localScale.x, 0, Time.deltaTime * scaleSpeed),
+				Mathf.Lerp(transform.localScale.y, 0, Time.deltaTime * scaleSpeed),
+				Mathf.Lerp(transform.localScale.z, 0, Time.deltaTime * scaleSpeed)
+			);
+		}
+	}
+
+	private void StartScalingOut() {
+		isScalingOut = true;
+		Destroy(gameObject, scaleSpeed * 0.1f);
 	}
 }

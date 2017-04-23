@@ -47,6 +47,10 @@ public class RocketEngine : MonoBehaviour {
 		}
 	}
 
+	public void RefuelFrom(FuelTank tank) {
+		CurrentFuel = Mathf.Min(maxFuel, CurrentFuel + tank.Capacity);
+	}
+
 	private void MaybeKillRocket() {
 		if (CurrentFuel <= 0) {
 			gameObject.GetComponent<Rocket>().Kill(true);

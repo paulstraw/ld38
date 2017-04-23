@@ -70,6 +70,14 @@ public class Rocket : MonoBehaviour {
 		Rigidbody otherRb = other.gameObject.GetComponent<Rigidbody>();
 
 		if (otherRb == null) {
+			switch (other.gameObject.tag) {
+			case "fuel":
+				engine.RefuelFrom(other.gameObject.GetComponent<FuelTank>());
+				break;
+			default:
+				break;
+			}
+
 			return;
 		}
 
