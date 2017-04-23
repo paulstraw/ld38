@@ -1,14 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class RocketTracker : MonoBehaviour {
-
 	[SerializeField]
 	private Transform rocketTransform;
 	[SerializeField]
-	private Rigidbody rocketBody;
+	private Rocket rocket;
 	[SerializeField]
 	private float minDistance = 6;
 	[SerializeField]
@@ -16,22 +14,14 @@ public class RocketTracker : MonoBehaviour {
 	[SerializeField]
 	private float zoomModifier = 2;
 
-	private List<Transform> planets;
-
-	void Awake(){
-		planets = GameObject.FindGameObjectsWithTag("planet").Select<GameObject, Transform>(
-			x => x.transform).ToList();
-	}
-
 	void Update(){
 		float targetX = rocketTransform.position.x;
 		float targetY = rocketTransform.position.y;
 		float targetZ;
 
-		Transform closestPlanet = GetClosestPlanet();
-
-		if (closestPlanet) {
-			targetZ = zoomModifier * Vector3.Distance(rocketTransform.position, closestPlanet.position);
+		if (rocket.closestPlanet) {
+			targetZ = zoomModifier * Vector3.Distance(
+				rocketTransform.position, rocket.closestPlanet.position);
 		} else {
 			targetZ = minDistance;
 		}
@@ -42,23 +32,5 @@ public class RocketTracker : MonoBehaviour {
 		Vector3 targetPosition = new Vector3(targetX, targetY, targetZ);
 
 		transform.position = targetPosition;
-	}
-
-	private Transform GetClosestPlanet(){
-		Transform bestTarget = null;
-		float closestDistanceSqr = Mathf.Infinity;
-		Vector3 currentPosition = rocketTransform.position;
-		foreach(Transform potentialTarget in planets)
-		{
-			Vector3 directionToTarget = potentialTarget.position - currentPosition;
-			float dSqrToTarget = directionToTarget.sqrMagnitude;
-			if(dSqrToTarget < closestDistanceSqr)
-			{
-				closestDistanceSqr = dSqrToTarget;
-				bestTarget = potentialTarget;
-			}
-		}
-
-		return bestTarget;
 	}
 }

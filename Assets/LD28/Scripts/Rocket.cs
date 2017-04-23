@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PicaVoxel;
+using System.Linq;
 
 public class Rocket : MonoBehaviour {
 	[SerializeField]
@@ -21,11 +22,21 @@ public class Rocket : MonoBehaviour {
 	[SerializeField]
 	private GameObject explosionBlock;
 
+	private List<Transform> planets;
+
+	public Transform closestPlanet;
+
 	void Awake(){
 		rb.maxAngularVelocity = maxRotationSpeed;
+
+		planets = GameObject.FindGameObjectsWithTag("planet").Select<GameObject, Transform>(
+			x => x.transform).ToList();
+		SetClosestPlanet();
 	}
 
 	void Update(){
+		SetClosestPlanet();
+
 		float h = Input.GetAxis("Horizontal");
 		//float x = Input.GetAxis("Vertical");
 		//float y = Input.GetAxis("Zed");
@@ -48,6 +59,24 @@ public class Rocket : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.T)) {
 			Kill();
 		}
+	}
+
+	private void SetClosestPlanet() {
+		Transform bestTarget = null;
+		float closestDistanceSqr = Mathf.Infinity;
+		Vector3 currentPosition = rocketTransform.position;
+		foreach(Transform potentialTarget in planets)
+		{
+			Vector3 directionToTarget = potentialTarget.position - currentPosition;
+			float dSqrToTarget = directionToTarget.sqrMagnitude;
+			if(dSqrToTarget < closestDistanceSqr)
+			{
+				closestDistanceSqr = dSqrToTarget;
+				bestTarget = potentialTarget;
+			}
+		}
+
+		closestPlanet = bestTarget;
 	}
 
 	void Kill(){
