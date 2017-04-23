@@ -25,6 +25,8 @@ public class Rocket : MonoBehaviour {
 	private List<Transform> planets;
 
 	public Transform closestPlanet;
+	public float? distanceToClosestPlanet;
+	public PlanetBody closestPlanetBody;
 
 	void Awake(){
 		rb.maxAngularVelocity = maxRotationSpeed;
@@ -36,6 +38,15 @@ public class Rocket : MonoBehaviour {
 
 	void Update(){
 		SetClosestPlanet();
+
+		if (
+			distanceToClosestPlanet.HasValue && closestPlanetBody &&
+			distanceToClosestPlanet.Value <= closestPlanetBody.atmosphereThickness
+		) {
+			rb.drag = closestPlanetBody.atmosphereDrag;
+		} else {
+			rb.drag = 0;
+		}
 
 		float h = Input.GetAxis("Horizontal");
 		//float x = Input.GetAxis("Vertical");
@@ -77,6 +88,14 @@ public class Rocket : MonoBehaviour {
 		}
 
 		closestPlanet = bestTarget;
+
+		if (closestPlanet) {
+			closestPlanetBody = closestPlanet.gameObject.GetComponent<PlanetBody>();
+			distanceToClosestPlanet = Vector3.Distance(rb.position, closestPlanet.position);
+		} else {
+			closestPlanetBody = null;
+			distanceToClosestPlanet = null;
+		}
 	}
 
 	void Kill(){
@@ -109,5 +128,4 @@ public class Rocket : MonoBehaviour {
 		rb.detectCollisions = true;
 		volume.Rebuild();
 	}
-
 }
