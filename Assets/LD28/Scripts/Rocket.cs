@@ -27,11 +27,11 @@ public class Rocket : MonoBehaviour {
 	private Quaternion initialRotation;
 
 	[HideInInspector]
-	public Transform closestPlanet;
+	public Transform closestPlanetTransform;
 	[HideInInspector]
 	public float? distanceToClosestPlanet;
 	[HideInInspector]
-	public PlanetBody closestPlanetBody;
+	public Planet closestPlanet;
 
 	public bool Dead { get; private set; }
 
@@ -57,10 +57,10 @@ public class Rocket : MonoBehaviour {
 		SetClosestPlanet();
 
 		if (
-			distanceToClosestPlanet.HasValue && closestPlanetBody &&
-			distanceToClosestPlanet.Value <= closestPlanetBody.atmosphereRadius
+			distanceToClosestPlanet.HasValue && closestPlanet &&
+			distanceToClosestPlanet.Value <= closestPlanet.atmosphereRadius
 		) {
-			rb.drag = closestPlanetBody.atmosphereDrag;
+			rb.drag = closestPlanet.atmosphereDrag;
 		} else {
 			rb.drag = 0;
 		}
@@ -105,13 +105,13 @@ public class Rocket : MonoBehaviour {
 			}
 		}
 
-		closestPlanet = bestTarget;
+		closestPlanetTransform = bestTarget;
 
-		if (closestPlanet) {
-			closestPlanetBody = closestPlanet.gameObject.GetComponent<PlanetBody>();
-			distanceToClosestPlanet = Vector3.Distance(rb.position, closestPlanet.position);
+		if (closestPlanetTransform) {
+			closestPlanet = closestPlanetTransform.gameObject.GetComponent<Planet>();
+			distanceToClosestPlanet = Vector3.Distance(rb.position, closestPlanetTransform.position);
 		} else {
-			closestPlanetBody = null;
+			closestPlanet = null;
 			distanceToClosestPlanet = null;
 		}
 	}
