@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Explodify : MonoBehaviour {
 	[SerializeField]
-	private float scaleSpeed = 3.0f;
+	private float scaleSpeed = 6.0f;
 
 	private bool isScalingOut = false;
 
@@ -41,6 +41,6 @@ public class Explodify : MonoBehaviour {
 
 	private void StartScalingOut() {
 		isScalingOut = true;
-		Destroy(gameObject, scaleSpeed);
+		Destroy(gameObject, scaleSpeed * 0.1f);
 	}
 }

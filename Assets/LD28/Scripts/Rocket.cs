@@ -7,7 +7,9 @@ public class Rocket : MonoBehaviour {
 	[SerializeField]
 	private float rocketForce;
 	[SerializeField]
-	private float rotateSpeed;
+	private float rotationSpeed = 0.3f;
+	[SerializeField]
+	private float maxRotationSpeed = 3.0f;
 	[SerializeField]
 	private Rigidbody rb;
 	[SerializeField]
@@ -19,6 +21,10 @@ public class Rocket : MonoBehaviour {
 	[SerializeField]
 	private GameObject explosionBlock;
 
+	void Awake(){
+		rb.maxAngularVelocity = maxRotationSpeed;
+	}
+
 	void Update(){
 		float h = Input.GetAxis("Horizontal");
 		//float x = Input.GetAxis("Vertical");
@@ -26,7 +32,8 @@ public class Rocket : MonoBehaviour {
 
 
 //		rocketTransform.Rotate(x * rotateSpeed, -y * rotateSpeed, -z * rotateSpeed);
-		rocketTransform.Rotate(0, 0, h * rotateSpeed);
+//		rocketTransform.Rotate(0, 0, h * rotateSpeed);
+		rb.AddRelativeTorque(0, 0, h * rotationSpeed);
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			rocketEngine.Play();
@@ -52,9 +59,11 @@ public class Rocket : MonoBehaviour {
 					if (vox.HasValue && vox.Value.State == VoxelState.Active) {
 						volume.SetVoxelStateAtArrayPosition(x, y, z, VoxelState.Hidden);
 
-						GameObject eb = Instantiate(explosionBlock);
-						eb.transform.position = volume.GetVoxelWorldPosition(x, y, z);
-						eb.GetComponent<Renderer>().material.color = vox.Value.Color;
+						if (y % 2 == 0) {
+							GameObject eb = Instantiate(explosionBlock);
+							eb.transform.position = volume.GetVoxelWorldPosition(x, y, z);
+							eb.GetComponent<Renderer>().material.color = vox.Value.Color;
+						}
 					}
 				}
 			}
