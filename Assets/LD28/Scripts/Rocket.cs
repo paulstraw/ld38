@@ -6,22 +6,15 @@ using System.Linq;
 
 public class Rocket : MonoBehaviour {
 	[SerializeField]
-	private float rocketForce;
-	[SerializeField]
 	private float rotationSpeed = 0.3f;
 	[SerializeField]
 	private float maxRotationSpeed = 3.0f;
-	[SerializeField]
-	private Rigidbody rb;
-	[SerializeField]
-	private Transform rocketTransform;
-	[SerializeField]
-	private ParticleSystem rocketEngine;
 	[SerializeField]
 	private Volume volume;
 	[SerializeField]
 	private GameObject explosionBlock;
 
+	private Rigidbody rb;
 	private List<Transform> planets;
 
 	public Transform closestPlanet;
@@ -29,6 +22,7 @@ public class Rocket : MonoBehaviour {
 	public PlanetBody closestPlanetBody;
 
 	void Awake(){
+		rb = gameObject.GetComponent<Rigidbody>();
 		rb.maxAngularVelocity = maxRotationSpeed;
 
 		planets = GameObject.FindGameObjectsWithTag("planet").Select<GameObject, Transform>(
@@ -49,23 +43,7 @@ public class Rocket : MonoBehaviour {
 		}
 
 		float h = Input.GetAxis("Horizontal");
-		//float x = Input.GetAxis("Vertical");
-		//float y = Input.GetAxis("Zed");
-
-
-//		rocketTransform.Rotate(x * rotateSpeed, -y * rotateSpeed, -z * rotateSpeed);
-//		rocketTransform.Rotate(0, 0, h * rotateSpeed);
 		rb.AddRelativeTorque(0, 0, h * rotationSpeed);
-
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			rocketEngine.Play();
-		} else if (Input.GetKeyUp(KeyCode.Space)) {
-			rocketEngine.Stop();
-		}
-
-		if (Input.GetKey(KeyCode.Space)) {
-			rb.AddForce(rocketTransform.TransformDirection(Vector3.up) * rocketForce);
-		}
 
 		if (Input.GetKeyDown(KeyCode.T)) {
 			Kill();
@@ -75,10 +53,10 @@ public class Rocket : MonoBehaviour {
 	private void SetClosestPlanet() {
 		Transform bestTarget = null;
 		float closestDistanceSqr = Mathf.Infinity;
-		Vector3 currentPosition = rocketTransform.position;
+
 		foreach(Transform potentialTarget in planets)
 		{
-			Vector3 directionToTarget = potentialTarget.position - currentPosition;
+			Vector3 directionToTarget = potentialTarget.position - transform.position;
 			float dSqrToTarget = directionToTarget.sqrMagnitude;
 			if(dSqrToTarget < closestDistanceSqr)
 			{
