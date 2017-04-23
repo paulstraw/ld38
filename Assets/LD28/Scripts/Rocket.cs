@@ -9,11 +9,13 @@ public class Rocket : MonoBehaviour {
 	[SerializeField]
 	TrailRenderer trail;
 	[SerializeField]
-	private float respawnTimeout = 4.2f;
+	private float respawnTimeout = 3.0f;
 	[SerializeField]
 	TextMesh tut1;
 	[SerializeField]
 	string[] deathMessages;
+	[SerializeField]
+	string baseTutorialText;
 
 	private RocketExploder exploder;
 	private RocketEngine engine;
@@ -35,6 +37,8 @@ public class Rocket : MonoBehaviour {
 
 	void Awake(){
 		Dead = false;
+
+		ResetTutorialText();
 
 		exploder = gameObject.GetComponent<RocketExploder>();
 		engine = gameObject.GetComponent<RocketEngine>();
@@ -111,7 +115,9 @@ public class Rocket : MonoBehaviour {
 		exploder.Explode();
 		rb.detectCollisions = false;
 
+		CancelInvoke("ResetTutorialText");
 		tut1.text = deathMessages[Random.Range(0, deathMessages.Length)];
+
 
 		if (autoRespawn) {
 			Invoke("Respawn", respawnTimeout);
@@ -126,7 +132,6 @@ public class Rocket : MonoBehaviour {
 		rb.position = initialPosition;
 
 		rb.detectCollisions = true;
-		rb.isKinematic = false;
 
 		exploder.Respawn();
 		engine.Respawn();
@@ -134,7 +139,13 @@ public class Rocket : MonoBehaviour {
 
 		Dead = false;
 
+		Invoke("ResetTutorialText", 2.1f);
+
 		Invoke("ClearTrail", 0.03f);
+	}
+
+	void ResetTutorialText() {
+		tut1.text = baseTutorialText;
 	}
 
 	void ClearTrail() {
