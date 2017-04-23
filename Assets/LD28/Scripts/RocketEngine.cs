@@ -38,4 +38,8 @@ public class RocketEngine : MonoBehaviour {
 			rb.AddForce(transform.TransformDirection(Vector3.up) * rocketForce);
 		}
 	}
+
+	public void Respawn() {
+		CurrentFuel = startFuel;
+	}
 }

@@ -19,4 +19,8 @@ public class RocketThruster : MonoBehaviour {
 		float h = Input.GetAxis("Horizontal");
 		rb.AddRelativeTorque(0, 0, h * rotationSpeed);
 	}
+
+	public void Respawn() {
+
+	}
 }

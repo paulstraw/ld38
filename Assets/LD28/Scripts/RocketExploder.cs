@@ -27,7 +27,7 @@ public class RocketExploder : MonoBehaviour {
 		volume.SetFrame(1);
 	}
 
-	public void Rebuild() {
+	public void Respawn() {
 		volume.SetFrame(0);
 	}
 }

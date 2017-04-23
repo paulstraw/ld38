@@ -8,6 +8,9 @@ public class Rocket : MonoBehaviour {
 	private float explosionThreshold = 2.4f;
 
 	private RocketExploder exploder;
+	private RocketEngine engine;
+	private RocketThruster thruster;
+
 	private Rigidbody rb;
 	private List<Transform> planets;
 	private Vector3 initialPosition;
@@ -20,8 +23,15 @@ public class Rocket : MonoBehaviour {
 	[HideInInspector]
 	public PlanetBody closestPlanetBody;
 
+	public bool Dead { get; private set; }
+
 	void Awake(){
+		Dead = false;
+
 		exploder = gameObject.GetComponent<RocketExploder>();
+		engine = gameObject.GetComponent<RocketEngine>();
+		thruster = gameObject.GetComponent<RocketThruster>();
+
 		rb = gameObject.GetComponent<Rigidbody>();
 		initialPosition = rb.position;
 		initialRotation = rb.rotation;
@@ -89,6 +99,8 @@ public class Rocket : MonoBehaviour {
 	}
 
 	private void Kill() {
+		Dead = true;
+
 		exploder.Explode();
 		rb.detectCollisions = false;
 	}
@@ -103,6 +115,10 @@ public class Rocket : MonoBehaviour {
 		rb.detectCollisions = true;
 		rb.isKinematic = false;
 
-		exploder.Rebuild();
+		exploder.Respawn();
+		engine.Respawn();
+		thruster.Respawn();
+
+		Dead = false;
 	}
 }
