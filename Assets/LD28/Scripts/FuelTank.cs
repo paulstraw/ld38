@@ -8,9 +8,9 @@ public class FuelTank : MonoBehaviour {
 	[SerializeField]
 	private float spinSpeed;
 	[SerializeField]
-	private Transform tank;
+	private Transform icon;
 	[SerializeField]
-	private Transform tankWrapper;
+	private Transform shell;
 	[SerializeField]
 	private float scaleSpeed;
 
@@ -26,8 +26,8 @@ public class FuelTank : MonoBehaviour {
 	}
 
 	void Update() {
-		tank.Rotate(spin, spinSpeed * Time.deltaTime);
-		tankWrapper.Rotate(-spin, spinSpeed * Time.deltaTime);
+		icon.Rotate(spin, spinSpeed * Time.deltaTime);
+		shell.Rotate(-spin, spinSpeed * Time.deltaTime);
 
 		if (isScalingOut) {
 			transform.localScale = new Vector3(
