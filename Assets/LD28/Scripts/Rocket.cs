@@ -6,6 +6,10 @@ using System.Linq;
 public class Rocket : MonoBehaviour {
 	[SerializeField]
 	private float explosionThreshold = 2.4f;
+	[SerializeField]
+	TextMesh tut1;
+	[SerializeField]
+	string[] deathMessages;
 
 	private RocketExploder exploder;
 	private RocketEngine engine;
@@ -103,6 +107,8 @@ public class Rocket : MonoBehaviour {
 
 		exploder.Explode();
 		rb.detectCollisions = false;
+
+		tut1.text = deathMessages[Random.Range(0, deathMessages.Length)];
 	}
 
 	void Respawn() {
