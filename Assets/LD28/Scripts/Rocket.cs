@@ -1,19 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PicaVoxel;
 using System.Linq;
 
 public class Rocket : MonoBehaviour {
-	[SerializeField]
-	private float rotationSpeed = 0.3f;
-	[SerializeField]
-	private float maxRotationSpeed = 3.0f;
-	[SerializeField]
-	private Volume volume;
-	[SerializeField]
-	private GameObject explosionBlock;
-
 	private Rigidbody rb;
 	private List<Transform> planets;
 
@@ -23,7 +13,6 @@ public class Rocket : MonoBehaviour {
 
 	void Awake(){
 		rb = gameObject.GetComponent<Rigidbody>();
-		rb.maxAngularVelocity = maxRotationSpeed;
 
 		planets = GameObject.FindGameObjectsWithTag("planet").Select<GameObject, Transform>(
 			x => x.transform).ToList();
@@ -40,13 +29,6 @@ public class Rocket : MonoBehaviour {
 			rb.drag = closestPlanetBody.atmosphereDrag;
 		} else {
 			rb.drag = 0;
-		}
-
-		float h = Input.GetAxis("Horizontal");
-		rb.AddRelativeTorque(0, 0, h * rotationSpeed);
-
-		if (Input.GetKeyDown(KeyCode.T)) {
-			Kill();
 		}
 	}
 
@@ -74,36 +56,5 @@ public class Rocket : MonoBehaviour {
 			closestPlanetBody = null;
 			distanceToClosestPlanet = null;
 		}
-	}
-
-	void Kill(){
-		for (int x = 0; x < volume.XSize; x++) {
-			for (int y = 0; y < volume.YSize; y++) {
-				for (int z = 0; z < volume.ZSize; z++) {
-					Voxel? vox = volume.GetVoxelAtArrayPosition(x, y, z);
-
-					if (vox.HasValue && vox.Value.State == VoxelState.Active) {
-						volume.SetVoxelStateAtArrayPosition(x, y, z, VoxelState.Hidden);
-
-						if (y % 2 == 0) {
-							GameObject eb = Instantiate(explosionBlock);
-							eb.transform.position = volume.GetVoxelWorldPosition(x, y, z);
-							eb.GetComponent<Renderer>().material.color = vox.Value.Color;
-						}
-					}
-				}
-			}
-		}
-
-		rb.detectCollisions = false;
-
-		volume.Frames[0].UpdateAllChunks();
-
-		Invoke("Respawn", 1.0f);
-	}
-
-	void Respawn() {
-		rb.detectCollisions = true;
-		volume.Rebuild();
 	}
 }
