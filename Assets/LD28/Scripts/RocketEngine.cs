@@ -30,6 +30,11 @@ public class RocketEngine : MonoBehaviour {
 
 		if (Input.GetKey(KeyCode.Space) && CurrentFuel > 0) {
 			CurrentFuel--;
+
+			if (CurrentFuel == 0) {
+				engineParticleSystem.Stop();
+			}
+
 			rb.AddForce(transform.TransformDirection(Vector3.up) * rocketForce);
 		}
 	}
