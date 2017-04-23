@@ -7,6 +7,10 @@ public class Rocket : MonoBehaviour {
 	[SerializeField]
 	private float explosionThreshold = 2.4f;
 	[SerializeField]
+	TrailRenderer trail;
+	[SerializeField]
+	private float respawnTimeout = 4.2f;
+	[SerializeField]
 	TextMesh tut1;
 	[SerializeField]
 	string[] deathMessages;
@@ -62,7 +66,6 @@ public class Rocket : MonoBehaviour {
 		Rigidbody otherRb = other.gameObject.GetComponent<Rigidbody>();
 
 		if (otherRb == null) {
-			Debug.Log("No otherRb");
 			return;
 		}
 
@@ -71,8 +74,7 @@ public class Rocket : MonoBehaviour {
 		Debug.Log("Crash: " + magnitude);
 
 		if (magnitude >= explosionThreshold) {
-			Kill();
-			Invoke("Respawn", 4.2f);
+			Kill(true);
 		}
 	}
 
@@ -102,16 +104,21 @@ public class Rocket : MonoBehaviour {
 		}
 	}
 
-	private void Kill() {
+	public void Kill(bool autoRespawn = false) {
 		Dead = true;
 
+		engine.Kill();
 		exploder.Explode();
 		rb.detectCollisions = false;
 
 		tut1.text = deathMessages[Random.Range(0, deathMessages.Length)];
+
+		if (autoRespawn) {
+			Invoke("Respawn", respawnTimeout);
+		}
 	}
 
-	void Respawn() {
+	public void Respawn() {
 		rb.angularVelocity = Vector3.zero;
 		rb.velocity = Vector3.zero;
 
@@ -126,5 +133,11 @@ public class Rocket : MonoBehaviour {
 		thruster.Respawn();
 
 		Dead = false;
+
+		Invoke("ClearTrail", 0.03f);
+	}
+
+	void ClearTrail() {
+		trail.Clear();
 	}
 }

@@ -15,13 +15,19 @@ public class RocketEngine : MonoBehaviour {
 	public int CurrentFuel { get; private set; }
 
 	private Rigidbody rb;
+	private Rocket rocket;
 
 	void Awake(){
+		rocket = gameObject.GetComponent<Rocket>();
 		rb = gameObject.GetComponent<Rigidbody>();
 		CurrentFuel = startFuel;
 	}
 
 	void Update(){
+		if (rocket.Dead) {
+			return;
+		}
+
 		if (Input.GetKeyDown(KeyCode.Space) && CurrentFuel > 0) {
 			engineParticleSystem.Play();
 		} else if (Input.GetKeyUp(KeyCode.Space)) {
@@ -33,10 +39,22 @@ public class RocketEngine : MonoBehaviour {
 
 			if (CurrentFuel == 0) {
 				engineParticleSystem.Stop();
+
+				Invoke("MaybeKillRocket", 3.0f);
 			}
 
 			rb.AddForce(transform.TransformDirection(Vector3.up) * rocketForce);
 		}
+	}
+
+	private void MaybeKillRocket() {
+		if (CurrentFuel <= 0) {
+			gameObject.GetComponent<Rocket>().Kill(true);
+		}
+	}
+
+	public void Kill() {
+		engineParticleSystem.Stop();
 	}
 
 	public void Respawn() {
