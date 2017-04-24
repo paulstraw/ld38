@@ -18,6 +18,8 @@ public class Rocket : MonoBehaviour {
 	string baseTutorialText;
 	[SerializeField]
 	AudioSource explosionSound;
+	[SerializeField]
+	private UnityEngine.UI.Text winText;
 
 	private RocketExploder exploder;
 	private RocketEngine engine;
@@ -93,7 +95,7 @@ public class Rocket : MonoBehaviour {
 		if (magnitude >= explosionThreshold) {
 			Kill(true);
 		} else if (other.gameObject.tag == "homeplanet") {
-			Debug.Log("Landed home");
+			winText.enabled = true;
 		}
 	}
 
