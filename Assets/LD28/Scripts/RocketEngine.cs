@@ -65,7 +65,7 @@ public class RocketEngine : MonoBehaviour {
 
 	private void MaybeKillRocket() {
 		if (CurrentFuel <= 0) {
-			gameObject.GetComponent<Rocket>().Kill(true);
+			gameObject.GetComponent<Rocket>().Kill(true, "Out of fuel!");
 		}
 	}
 

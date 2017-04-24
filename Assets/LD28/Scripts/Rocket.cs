@@ -9,7 +9,7 @@ public class Rocket : MonoBehaviour {
 	[SerializeField]
 	TrailRenderer trail;
 	[SerializeField]
-	private float respawnTimeout = 3.0f;
+	private float respawnTimeout = 2.1f;
 	[SerializeField]
 	TextMesh tut1;
 	[SerializeField]
@@ -76,6 +76,9 @@ public class Rocket : MonoBehaviour {
 			case "fuel":
 				engine.RefuelFrom(other.gameObject.GetComponent<FuelTank>());
 				break;
+			case "worldborder":
+				Kill(true, "Hey, come back!");
+				break;
 			default:
 				break;
 			}
@@ -89,6 +92,8 @@ public class Rocket : MonoBehaviour {
 
 		if (magnitude >= explosionThreshold) {
 			Kill(true);
+		} else if (other.gameObject.tag == "homeplanet") {
+			Debug.Log("Landed home");
 		}
 	}
 
@@ -118,7 +123,7 @@ public class Rocket : MonoBehaviour {
 		}
 	}
 
-	public void Kill(bool autoRespawn = false) {
+	public void Kill(bool autoRespawn = false, string message = null) {
 		Dead = true;
 
 		engine.Kill();
@@ -128,8 +133,8 @@ public class Rocket : MonoBehaviour {
 		rb.detectCollisions = false;
 
 		CancelInvoke("ResetTutorialText");
-		tut1.text = deathMessages[Random.Range(0, deathMessages.Length)];
 
+		tut1.text = message != null ? message : deathMessages[Random.Range(0, deathMessages.Length)];
 
 		if (autoRespawn) {
 			Invoke("Respawn", respawnTimeout);
