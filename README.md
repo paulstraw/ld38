@@ -4,7 +4,7 @@ Created in 48 hours for Ludum Dare 38. Check it out:
 
 * [Play in your browser on itch.io](https://paulstraw.itch.io/boostersdayout)
 * [Vote on ldjam.com](https://ldjam.com/events/ludum-dare/38/boosters-day-out)
-* [Read the project postmortem](https://ldjam.com/events/ludum-dare/38/boosters-day-out/$29123)
+* [Read the project postmortem](https://ldjam.com/events/ludum-dare/38/boosters-day-out/compo-boosters-day-out-postmortem)
 
 ## Asset Store Assets
 
